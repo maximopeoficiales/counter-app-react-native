@@ -17,6 +17,7 @@ export const CounterScreen = () => {
                 text='+1'
                 location="right"
             />
+
             <FabButton onPress={() => {
                 setCounter(counter - 1)
             }}
