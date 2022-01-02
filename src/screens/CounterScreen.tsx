@@ -1,22 +1,41 @@
 import React, { useState } from 'react'
-import { Button, Text, View } from 'react-native'
+import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FabButton } from '../components/FabButton';
 
 export const CounterScreen = () => {
     const [counter, setCounter] = useState(0);
 
     return (
-        <View style={{ flex: 1, justifyContent: "center" }}>
-            <Text style={{
-                textAlign: "center",
-                fontSize: 40,
-                top: -15
-            }}>
+        <View style={styles.container}>
+            <Text style={styles.title}>
                 Contador {counter}
             </Text>
-            <Button
-                title='Aumentar'
-                onPress={() => setCounter(counter + 1)}
+
+            <FabButton onPress={() => {
+                setCounter(counter + 1)
+            }}
+                text='+1'
+                location="right"
+            />
+            <FabButton onPress={() => {
+                setCounter(counter - 1)
+            }}
+                text='-1'
+                location="left"
             />
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1, justifyContent: "center"
+    },
+    title: {
+        textAlign: "center",
+        fontSize: 40,
+        top: -15
+    },
+
+
+});
