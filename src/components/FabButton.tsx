@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Platform, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native'
 
 export interface MyProps {
     onPress: () => void;
@@ -7,30 +7,53 @@ export interface MyProps {
     text: string
 }
 export const FabButton = ({ onPress, location, text }: MyProps) => {
-    return (
-        <TouchableOpacity
-            onPress={onPress}
-            style={location == "left" ? styles.fabLocationLeft : styles.fabLocationRight}
-        >
+    const IOS = () => {
+        return (
+            <TouchableOpacity
+                activeOpacity={0.75}
+                style={[styles.fabLocation, location == "left" ? styles.left : styles.right]}
+                onPress={onPress}
+            >
+                <View
+                    style={styles.fab}>
+                    <Text style={styles.fabText}>{text}</Text>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+    const Android = () => {
+        return (
             <View
-                style={styles.fab}>
-                <Text style={styles.fabText}>{text}</Text>
+                style={[styles.fabLocation, location == "left" ? styles.left : styles.right]}
+            >
+                <TouchableNativeFeedback
+                    onPress={onPress}
+                    background={TouchableNativeFeedback.Ripple("#28425B", false, 30)}
+                >
+                    <View
+                        style={styles.fab}>
+                        <Text style={styles.fabText}>{text}</Text>
+                    </View>
+                </TouchableNativeFeedback>
             </View>
-        </TouchableOpacity>
-    )
+        )
+    }
+    return Platform.OS == "ios" ? IOS() : Android();
 }
 
 const styles = StyleSheet.create({
-    fabLocationRight: {
+    fabLocation: {
         position: "absolute",
         bottom: 20,
-        right: 25,
     },
-    fabLocationLeft: {
-        position: "absolute",
-        bottom: 20,
+    left: {
         left: 25,
     },
+    right: {
+        right: 25,
+    },
+
     fab: {
         backgroundColor: "#5856D6",
         width: 60,
@@ -38,6 +61,14 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         justifyContent: "center",
         alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.36,
+        shadowRadius: 6.68,
+        elevation: 8,
     },
     fabText: {
         color: "white",
